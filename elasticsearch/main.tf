@@ -382,9 +382,9 @@ resource "aws_lb_target_group" "backend_default-elasticsearch-tg" {
 }
 
 
-###################################
+##################################
 # Target Group ElasticSearch Nodes
-###################################
+##################################
 resource "aws_lb_target_group" "elastic-search-nodes" {
   name = "elastic-search-nodes"
   #  target_type  = "ip"
@@ -392,7 +392,9 @@ resource "aws_lb_target_group" "elastic-search-nodes" {
   protocol = "HTTP"
   vpc_id   = module.vpc.vpc_id
 
+  ##############
   # Health Check
+  ##############
   health_check {
     interval = "30"
     path     = "/"
@@ -410,48 +412,65 @@ resource "aws_lb_target_group" "elastic-search-nodes" {
 
 
 
-######
-# HTTP
-######
+################
+# HTTP Listeners
+################
 resource "aws_lb_listener" "backend_alb_elasticsearch_http" {
   load_balancer_arn = module.alb-backend-elasticsearch.aws-alb-arn
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.backend_default-elasticsearch-tg.arn
-
-
+    type = "redirect"
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 }
 
 
+#################
+# HTTPS Listeners
+#################
+resource "aws_lb_listener" "https" {
+  load_balancer_arn                   = module.alb-backend-elasticsearch.aws-alb-arn
+  port                                = "443"
+  protocol                            = "HTTPS"
+  ssl_policy                          = "ELBSecurityPolicy-2016-08"
+  # DNS Verified ACM ARN Required
+  certificate_arn                     = "arn:aws:acm:us-east-1:617964620752:certificate/337d1783-bd27-48eb-841d-e278f3e7bd9f"
 
-
-###############################################
-# Host Based & Path Based Routing ElasticSearch
-###############################################
-
-resource "aws_lb_listener_rule" "elastic-search-nodes" {
-  listener_arn = aws_lb_listener.backend_alb_elasticsearch_http.arn
-
-  action {
+  default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.elastic-search-nodes.arn
+    target_group_arn = aws_lb_target_group.backend_default-elasticsearch-tg.arn
   }
+}
 
+
+#####################
+# Https Listener Rule
+#####################
+resource "aws_alb_listener_rule" "https-listener" {
+  listener_arn = aws_lb_listener.https.arn
+  action {
+    type = "forward"
+    target_group_arn = aws_lb_target_group.backend_default-elasticsearch-tg.arn
+  }
   condition {
     host_header {
       values = ["elasticsearch-cluster.cloudgeeks.ca"]
     }
   }
+
   condition {
     path_pattern {
       values = ["/*"]
     }
   }
-  priority = 2
+
+  priority = 1
 }
 
   

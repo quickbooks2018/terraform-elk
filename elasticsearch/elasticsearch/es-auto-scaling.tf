@@ -12,7 +12,7 @@ module "launch-configuration-es-master-1" {
   ebs_optimized             = true
   iam_instance_profile_name = module.iam-instance-profile.ec2-instance-profile-name
   # Ubuntu
-  image_id              = "ami-08c40ec9ead489470"
+  image_id              = "ami-0795d208df8a383f4"
   instance_type         = "t3a.medium"
   volume_size           = "30"
   volume_type           = "gp2"
@@ -37,7 +37,6 @@ module "auto-scaling-es-master-1" {
   force-delete              = "true"
   #A list of subnet IDs to launch resources in
   vpc-zone-identifier = [module.vpc.private_subnets][0]
-  target-group-arns   = [aws_lb_target_group.elastic-search-nodes.arn]
   health-check-type   = "EC2"
   key                 = "Name"
   value               = "es-master-node-1"
@@ -55,7 +54,7 @@ module "launch-configuration-es-master-node-2" {
   ebs_optimized             = true
   iam_instance_profile_name = module.iam-instance-profile.ec2-instance-profile-name
   # Ubuntu
-  image_id              = "ami-08c40ec9ead489470"
+  image_id              = "ami-0795d208df8a383f4"
   instance_type         = "t3a.medium"
   volume_size           = "30"
   volume_type           = "gp2"
@@ -81,7 +80,6 @@ module "auto-scaling-es-master-node-2" {
   force-delete              = "true"
   #A list of subnet IDs to launch resources in
   vpc-zone-identifier = [module.vpc.private_subnets][0]
-  target-group-arns   = [aws_lb_target_group.elastic-search-nodes.arn]
   health-check-type   = "EC2"
   key                 = "Name"
   value               = "es-master-node-2"
@@ -98,7 +96,7 @@ module "launch-configuration-es-master-node-3" {
   ebs_optimized             = true
   iam_instance_profile_name = module.iam-instance-profile.ec2-instance-profile-name
   # Ubuntu
-  image_id              = "ami-08c40ec9ead489470"
+  image_id              = "ami-0795d208df8a383f4"
   instance_type         = "t3a.medium"
   volume_size           = "30"
   volume_type           = "gp2"
@@ -124,7 +122,6 @@ module "auto-scaling-es-master-node-3" {
   force-delete              = "true"
   #A list of subnet IDs to launch resources in
   vpc-zone-identifier = [module.vpc.private_subnets][0]
-  target-group-arns   = [aws_lb_target_group.elastic-search-nodes.arn]
   health-check-type   = "EC2"
   key                 = "Name"
   value               = "es-master-node-3"
@@ -141,7 +138,7 @@ module "launch-configuration-es-data-nodes" {
   ebs_optimized             = true
   iam_instance_profile_name = module.iam-instance-profile.ec2-instance-profile-name
   # Ubuntu
-  image_id              = "ami-08c40ec9ead489470"
+  image_id              = "ami-0795d208df8a383f4"
   instance_type         = "t3a.medium"
   volume_size           = "30"
   volume_type           = "gp2"
