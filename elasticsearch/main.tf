@@ -221,7 +221,7 @@ module "iam-instance-profile" {
 # Private Hosted Zone  # Important: Note ---> Must update the USERDATA with PRIVATE HOSTED ID
 ######################
 resource "aws_route53_zone" "cloudgeeks-private-hosted-zone" {
-  name = "cloudgeeks.ca"
+  name = "cloudgeeks.tk"
   vpc {
     vpc_id = module.vpc.vpc_id
   }
@@ -290,7 +290,7 @@ resource "aws_route53_record" "es-node-3" {
 ###############################
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/high-availability-cluster-small-clusters.html      
 
-# ENDPOINT='elasticsearch-cluster.cloudgeeks.ca'
+# ENDPOINT='elasticsearch-cluster.cloudgeeks.tk'
 
 # export ENDPOINT
 
@@ -305,19 +305,19 @@ resource "aws_route53_record" "es-node-3" {
 ############
 # curl -X GET "${ENDPOINT}/_cat/indices"
 
-# elasticsearch-cluster.cloudgeeks.ca	Alias dualstack.internal-backend-alb-elasticsearch-qa-397640293.us-east-1.elb.amazonaws.com.
+# elasticsearch-cluster.cloudgeeks.tk	Alias dualstack.internal-backend-alb-elasticsearch-qa-397640293.us-east-1.elb.amazonaws.com.
 
-# elasticsearch-node1.cloudgeeks.ca	A	Simple	-
+# elasticsearch-node1.cloudgeeks.tk	A	Simple	-
 
-# elasticsearch-node2.cloudgeeks.ca	A	Simple	-
+# elasticsearch-node2.cloudgeeks.tk	A	Simple	-
 
-# elasticsearch-node3.cloudgeeks.ca	A	Simple	-
+# elasticsearch-node3.cloudgeeks.tk	A	Simple	-
 
 # ES Health Checks
 
 # curl -X GET "localhost:9200/_cluster/health?pretty"
 
-# curl -X GET "elasticsearch-cluster.cloudgeeks.ca/_cluster/health?pretty"
+# curl -X GET "elasticsearch-cluster.cloudgeeks.tk/_cluster/health?pretty"
 
 #####################################################
 # BackEnd Application Load Balancer for ElasticSearch
@@ -460,7 +460,7 @@ resource "aws_alb_listener_rule" "https-listener" {
   }
   condition {
     host_header {
-      values = ["elasticsearch-cluster.cloudgeeks.ca"]
+      values = ["elasticsearch-cluster.cloudgeeks.tk"]
     }
   }
 
