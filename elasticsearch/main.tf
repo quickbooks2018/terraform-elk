@@ -15,17 +15,17 @@ terraform {
   required_version = ">= 0.15, > 0.12"
 }
 
-### Backend ###
-# S3
-###############
-terraform {
-   backend "s3" {
-     bucket         = "cloudgeeksca-backend-terraform"
-     key            = "env/dev/cloudgeeks-dev.tfstate"
-    region         = "us-east-1"
-    # dynamodb_table = "cloudgeeksca-dev-terraform-backend-state-lock"
-  }
-}
+#### Backend ###
+## S3
+################
+#terraform {
+#   backend "s3" {
+#     bucket         = "cloudgeeksca-backend-terraform"
+#     key            = "env/dev/cloudgeeks-dev.tfstate"
+#    region         = "us-east-1"
+#    # dynamodb_table = "cloudgeeksca-dev-terraform-backend-state-lock"
+#  }
+#}
 
 
 # aws s3api create-bucket --bucket cloudgeeksca-backend-terraform --region us-east-1
@@ -440,7 +440,7 @@ resource "aws_lb_listener" "https" {
   protocol                            = "HTTPS"
   ssl_policy                          = "ELBSecurityPolicy-2016-08"
   # DNS Verified ACM ARN Required
-  certificate_arn                     = "arn:aws:acm:us-east-1:617964620752:certificate/337d1783-bd27-48eb-841d-e278f3e7bd9f"
+  certificate_arn                     = "arn:aws:acm:us-east-1:309457222015:certificate/3ec9a4ba-36bf-4917-b154-c4180fe03316"
 
   default_action {
     type             = "forward"

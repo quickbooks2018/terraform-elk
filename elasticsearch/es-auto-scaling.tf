@@ -12,7 +12,7 @@ module "launch-configuration-es-master-1" {
   ebs_optimized             = true
   iam_instance_profile_name = module.iam-instance-profile.ec2-instance-profile-name
   # Ubuntu
-  image_id              = "ami-0795d208df8a383f4"
+  image_id              = "ami-09a169db1a23aad3c"
   instance_type         = "t3a.medium"
   volume_size           = "30"
   volume_type           = "gp2"
@@ -54,7 +54,7 @@ module "launch-configuration-es-master-node-2" {
   ebs_optimized             = true
   iam_instance_profile_name = module.iam-instance-profile.ec2-instance-profile-name
   # Ubuntu
-  image_id              = "ami-0795d208df8a383f4"
+  image_id              = "ami-09a169db1a23aad3c"
   instance_type         = "t3a.medium"
   volume_size           = "30"
   volume_type           = "gp2"
@@ -96,7 +96,7 @@ module "launch-configuration-es-master-node-3" {
   ebs_optimized             = true
   iam_instance_profile_name = module.iam-instance-profile.ec2-instance-profile-name
   # Ubuntu
-  image_id              = "ami-0795d208df8a383f4"
+  image_id              = "ami-09a169db1a23aad3c"
   instance_type         = "t3a.medium"
   volume_size           = "30"
   volume_type           = "gp2"
@@ -138,7 +138,7 @@ module "launch-configuration-es-data-nodes" {
   ebs_optimized             = true
   iam_instance_profile_name = module.iam-instance-profile.ec2-instance-profile-name
   # Ubuntu
-  image_id              = "ami-0795d208df8a383f4"
+  image_id              = "ami-09a169db1a23aad3c"
   instance_type         = "t3a.medium"
   volume_size           = "30"
   volume_type           = "gp2"
