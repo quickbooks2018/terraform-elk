@@ -15,23 +15,22 @@ CONTAINER_NAME='elasticsearch-data-node'
 localip=$(curl -fs http://169.254.169.254/latest/meta-data/local-ipv4)
 localip_host=$(echo "$((${-+"(${localip//./"+256*("}))))"}>>24&255))")
 
+# TLS
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.17/configuring-tls-docker.html
+CERTS_DIR='/usr/share/elasticsearch/config/certificates'
+DOMAIN='cloudgeeks.ca'
+
 #########
 # NETWORK
 #########
 # We will use host network
-
-ELASTIC_VERSION="7.5.2"
-HOST1='elasticsearch-node1.cloudgeeks.ca'
-HOST2='elasticsearch-node2.cloudgeeks.ca'
-HOST3='elasticsearch-node3.cloudgeeks.ca'
-CONTAINER_NAME='elasticsearch-node'
-
-
 export ELASTIC_VERSION
 export HOST1
 export HOST2
 export HOST3
 export CONTAINER_NAME
+export DOMAIN
+export CERTS_DIR
 
 cat << EOF > docker-compose.yaml
 services:
@@ -67,7 +66,11 @@ services:
      - bootstrap.memory_lock=true
      - "ES_JAVA_OPTS=-Xms2g -Xmx2g -Des.index.number_of_replicas=1 -Des.enforce.bootstrap.checks=true"
      - xpack.monitoring.collection.enabled=true
-     - xpack.security.transport.ssl.enabled=false
+     - xpack.security.transport.ssl.enabled=true
+     - xpack.security.transport.ssl.verification_mode=certificate
+     - xpack.security.transport.ssl.certificate_authorities=${CERTS_DIR}/CA.crt
+     - xpack.security.transport.ssl.certificate=${CERTS_DIR}/$DOMAIN.crt
+     - xpack.security.transport.ssl.key=${CERTS_DIR}/$DOMAIN.key
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9200"]
       interval: 30s

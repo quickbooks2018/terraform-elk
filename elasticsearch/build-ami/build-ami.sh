@@ -21,7 +21,8 @@ EOF
 mount -a
 df -hT
 chmod 0777 /data/
-lsblk -o name,mountpoint,label,size,uuid
+chmo 0777 ${HOME}/tls
+
 
 ######################################
 # Docker & Docker Compose Installation

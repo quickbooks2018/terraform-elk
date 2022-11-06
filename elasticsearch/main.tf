@@ -456,7 +456,7 @@ resource "aws_alb_listener_rule" "https-listener" {
   listener_arn = aws_lb_listener.https.arn
   action {
     type = "forward"
-    target_group_arn = aws_lb_target_group.backend_default-elasticsearch-tg.arn
+    target_group_arn = aws_lb_target_group.elastic-search-nodes.arn
   }
   condition {
     host_header {

@@ -37,6 +37,7 @@ module "auto-scaling-es-master-1" {
   force-delete              = "true"
   #A list of subnet IDs to launch resources in
   vpc-zone-identifier = [module.vpc.private_subnets][0]
+  target-group-arns   = [aws_lb_target_group.elastic-search-nodes.arn]
   health-check-type   = "EC2"
   key                 = "Name"
   value               = "es-master-node-1"
@@ -80,6 +81,7 @@ module "auto-scaling-es-master-node-2" {
   force-delete              = "true"
   #A list of subnet IDs to launch resources in
   vpc-zone-identifier = [module.vpc.private_subnets][0]
+  target-group-arns   = [aws_lb_target_group.elastic-search-nodes.arn]
   health-check-type   = "EC2"
   key                 = "Name"
   value               = "es-master-node-2"
@@ -122,6 +124,7 @@ module "auto-scaling-es-master-node-3" {
   force-delete              = "true"
   #A list of subnet IDs to launch resources in
   vpc-zone-identifier = [module.vpc.private_subnets][0]
+  target-group-arns   = [aws_lb_target_group.elastic-search-nodes.arn]
   health-check-type   = "EC2"
   key                 = "Name"
   value               = "es-master-node-3"

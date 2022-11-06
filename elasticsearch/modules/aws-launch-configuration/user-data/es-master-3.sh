@@ -12,6 +12,11 @@ HOST2='elasticsearch-node2.cloudgeeks.ca'
 HOST3='elasticsearch-node3.cloudgeeks.ca'
 CONTAINER_NAME='elasticsearch-node-3'
 
+# TLS
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.17/configuring-tls-docker.html
+CERTS_DIR='/usr/share/elasticsearch/config/certificates'
+DOMAIN='cloudgeeks.ca'
+
 
 #################
 # Route53 Section
@@ -50,17 +55,13 @@ aws route53 change-resource-record-sets --hosted-zone-id $hostedzoneid --change-
 #########
 # We will use host network
 
-ELASTIC_VERSION="7.5.2"
-HOST1='elasticsearch-node1.cloudgeeks.ca'
-HOST2='elasticsearch-node2.cloudgeeks.ca'
-HOST3='elasticsearch-node3.cloudgeeks.ca'
-CONTAINER_NAME='elasticsearch-node-3'
-
 export ELASTIC_VERSION
 export HOST1
 export HOST2
 export HOST3
 export CONTAINER_NAME
+export DOMAIN
+export CERTS_DIR
 
 
 cat << EOF > docker-compose.yaml
@@ -80,7 +81,8 @@ services:
     hostname: ${HOST3}
     restart: unless-stopped
     volumes:
-      - /data/usr/share/elasticsearch/data
+      - /data:/usr/share/elasticsearch/data
+      - ${HOME}/tls:${CERTS_DIR}
 
     environment:
       - "node.name=${HOST3}"
@@ -95,12 +97,14 @@ services:
       - "discovery.seed_hosts=${HOST1},${HOST2}"
       - "cluster.initial_master_nodes=${HOST1},${HOST2},${HOST3}"
       - "ES_JAVA_OPTS=-Xms2g -Xmx2g -Des.index.number_of_replicas=0 -Des.enforce.bootstrap.checks=true"
-      - "xpack.security.enabled=false"
-      - "xpack.security.http.ssl.enabled=false"
-      - "xpack.security.transport.ssl.enabled=false"
       - "xpack.ml.enabled=false"
       - "xpack.graph.enabled=false"
       - "xpack.watcher.enabled=false"
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.security.transport.ssl.certificate_authorities=${CERTS_DIR}/CA.crt
+      - xpack.security.transport.ssl.certificate=${CERTS_DIR}/$DOMAIN.crt
+      - xpack.security.transport.ssl.key=${CERTS_DIR}/$DOMAIN.key
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9200"]
       interval: 30s
