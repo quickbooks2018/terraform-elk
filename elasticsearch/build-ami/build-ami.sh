@@ -20,7 +20,8 @@ EOF
 
 mount -a
 df -hT
-
+chmod 0777 /data/
+lsblk -o name,mountpoint,label,size,uuid
 
 ######################################
 # Docker & Docker Compose Installation
