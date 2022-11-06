@@ -19,8 +19,12 @@ COMMONNAME='Self Signed Certificate'
 DIR="$(pwd)/tls"
 
 # Optional: Ensure the target directory exists and is empty.
+if [ -d "${DIR}" ]
+then
 rm -rf "${DIR}"
+else
 mkdir -p "${DIR}"
+fi
 
 
 
@@ -72,15 +76,7 @@ EOF
 # To put a password on the key, remove the -nodes option.
 #
 # Be sure to update the subject to match your organization.
-openssl req \
-  -new \
-  -newkey rsa:${default_bits} \
-  -days ${DAYS} \
-  -nodes \
-  -x509 \
-  -subj "/C="$COUNTRY"/ST="$PROVINCE"/L="$LOCATION"/O="$DEPARTMENT"" \
-  -keyout "${DIR}/CA.key" \
-  -out "${DIR}/CA.crt"
+openssl req -new -newkey rsa:${default_bits} -days ${DAYS} -nodes -x509 -subj "/C="$COUNTRY"/ST="$PROVINCE"/L="$LOCATION"/O="$DEPARTMENT"" -keyout "${DIR}/CA.key" -out "${DIR}/CA.crt"
 #
 # For each server/service you want to secure with your CA, repeat the
 # following steps:
@@ -92,23 +88,11 @@ openssl genrsa -out "${DIR}/"$DOMAIN".key" ${default_bits}
 
 # Generate a CSR using the configuration and the key just generated. We will
 # give this CSR to our CA to sign.
-openssl req \
-  -new -key "${DIR}/"$DOMAIN".key" \
-  -out "${DIR}/"$DOMAIN".csr" \
-  -config "${DIR}/openssl.cnf"
+openssl req -new -key "${DIR}/"$DOMAIN".key" -out "${DIR}/"$DOMAIN".csr" -config "${DIR}/openssl.cnf"
 
 # Sign the CSR with our CA. This will generate a new certificate that is signed
 # by our CA.
-openssl x509 \
-  -req \
-  -days ${DAYS} \
-  -in "${DIR}/"$DOMAIN".csr" \
-  -CA "${DIR}/CA.crt" \
-  -CAkey "${DIR}/CA.key" \
-  -CAcreateserial \
-  -extensions v3_req \
-  -extfile "${DIR}/openssl.cnf" \
-  -out "${DIR}/"$DOMAIN".crt"
+openssl x509 -req -days ${DAYS} -in "${DIR}/"$DOMAIN".csr" -CA "${DIR}/CA.crt" -CAkey "${DIR}/CA.key" -CAcreateserial -extensions v3_req -extfile "${DIR}/openssl.cnf" -out "${DIR}/"$DOMAIN".crt"
 
 # (Optional) Verify the certificate.
 openssl x509 -in "${DIR}/"$DOMAIN".crt" -noout -text

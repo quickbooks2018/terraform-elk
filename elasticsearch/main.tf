@@ -440,7 +440,7 @@ resource "aws_lb_listener" "https" {
   protocol                            = "HTTPS"
   ssl_policy                          = "ELBSecurityPolicy-2016-08"
   # DNS Verified ACM ARN Required
-  certificate_arn                     = "arn:aws:acm:us-east-1:309457222015:certificate/3ec9a4ba-36bf-4917-b154-c4180fe03316"
+  certificate_arn                     = "arn:aws:acm:us-east-1:208157287953:certificate/7a162e65-b713-4af3-a78c-9b74b0bd5ed9"
 
   default_action {
     type             = "forward"
