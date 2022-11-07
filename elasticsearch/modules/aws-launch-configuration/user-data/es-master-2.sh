@@ -11,6 +11,8 @@ HOST1='elasticsearch-node1.cloudgeeks.tk'
 HOST2='elasticsearch-node2.cloudgeeks.tk'
 HOST3='elasticsearch-node3.cloudgeeks.tk'
 CONTAINER_NAME='elasticsearch-node-2'
+IMAGE='es'
+VERSION='latest'
 
 # TLS
 # https://www.elastic.co/guide/en/elasticsearch/reference/7.17/configuring-tls-docker.html
@@ -63,12 +65,23 @@ export HOST3
 export CONTAINER_NAME
 export DOMAIN
 export CERTS_DIR
+export IMAGE
+export VERSION
+
+cat << EOF > Dockerfile
+FROM ${ELASTIC_IMAGE}:${ELASTIC_VERSION}
+RUN mkdir -p ${CERTS_DIR}
+COPY tls ${CERTS_DIR}
+EOF
 
 cat << EOF > docker-compose.yaml
 services:
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${IMAGE}:${VERSION}
     shm_size: '2gb'   # shared mem
     network_mode: host
     logging:
