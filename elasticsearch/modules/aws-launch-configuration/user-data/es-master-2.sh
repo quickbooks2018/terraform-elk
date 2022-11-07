@@ -13,7 +13,7 @@ HOST3='elasticsearch-node3.cloudgeeks.tk'
 CONTAINER_NAME='elasticsearch-node-2'
 
 # TLS
-https://www.elastic.co/guide/en/elasticsearch/reference/7.17/configuring-tls-docker.html
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.17/configuring-tls-docker.html
 CERTS_DIR='/usr/share/elasticsearch/config/certificates'
 DOMAIN='cloudgeeks.tk'
 
