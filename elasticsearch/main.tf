@@ -292,6 +292,8 @@ resource "aws_route53_record" "es-node-3" {
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/high-availability-cluster-small-clusters.html      
 
 # ENDPOINT='https://elasticsearch-cluster.cloudgeeks.tk'
+      
+# ENDPOINT='https://elasticsearch-node1.cloudgeeks.tk:9200'
 
 # export ENDPOINT
 
