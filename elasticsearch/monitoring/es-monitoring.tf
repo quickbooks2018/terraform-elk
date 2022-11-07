@@ -46,7 +46,7 @@ module "auto-scaling-es-monitoring" {
 module "es-monitoring-sns-topic-auto-scaling" {
   source                         = "./modules/aws-sns"
   auto-scaling-sns-name          = "ES-Monitoring-AutoScaling-SNS-Topic"
-  sns-subscription-email-address = "info@cloudgeeks.ca"
+  sns-subscription-email-address = "info@cloudgeeks.tk"
 }
 
 #########################

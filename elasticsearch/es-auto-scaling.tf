@@ -182,7 +182,7 @@ module "auto-scaling-es-data-nodes" {
 module "sns-topic-auto-scaling" {
   source                         = "./modules/aws-sns"
   auto-scaling-sns-name          = "ES-AutoScaling-SNS-Topic"
-  sns-subscription-email-address = "info@cloudgeeks.ca"
+  sns-subscription-email-address = "info@cloudgeeks.tk"
 }
 
 module "auto-scaling-sns" {

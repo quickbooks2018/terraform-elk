@@ -8,9 +8,9 @@
 # Elastic DATA Nodes
 ####################
 ELASTIC_VERSION='7.5.2'
-HOST1='elasticsearch-node1.cloudgeeks.ca'
-HOST2='elasticsearch-node2.cloudgeeks.ca'
-HOST3='elasticsearch-node3.cloudgeeks.ca'
+HOST1='elasticsearch-node1.cloudgeeks.tk'
+HOST2='elasticsearch-node2.cloudgeeks.tk'
+HOST3='elasticsearch-node3.cloudgeeks.tk'
 CONTAINER_NAME='elasticsearch-data-node'
 localip=$(curl -fs http://169.254.169.254/latest/meta-data/local-ipv4)
 localip_host=$(echo "$((${-+"(${localip//./"+256*("}))))"}>>24&255))")
@@ -18,7 +18,7 @@ localip_host=$(echo "$((${-+"(${localip//./"+256*("}))))"}>>24&255))")
 # TLS
 # https://www.elastic.co/guide/en/elasticsearch/reference/7.17/configuring-tls-docker.html
 CERTS_DIR='/usr/share/elasticsearch/config/certificates'
-DOMAIN='cloudgeeks.ca'
+DOMAIN='cloudgeeks.tk'
 
 #########
 # NETWORK
