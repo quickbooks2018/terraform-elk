@@ -20,12 +20,13 @@ terraform {
 ################
 terraform {
    backend "s3" {
-     bucket         = "cloudgeeksca-backend-terraform"
-     key            = "env/dev/cloudgeeks-dev.tfstate"
-    region         = "us-east-1"
+     bucket          = "cloudgeeksca-backend-terraform"
+     key             = "env/dev/cloudgeeks-dev.tfstate"
+     region          = "us-east-1"
     # dynamodb_table = "cloudgeeksca-dev-terraform-backend-state-lock"
   }
 }
+
 
 
 # aws s3api create-bucket --bucket cloudgeeksca-backend-terraform --region us-east-1
