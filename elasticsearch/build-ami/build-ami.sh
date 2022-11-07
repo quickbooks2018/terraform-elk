@@ -48,5 +48,5 @@ chmod 0777 /data/
 curl -# -LO https://raw.githubusercontent.com/quickbooks2018/cloudflare-tls/main/ssl.sh
 chmod +x ssl.sh
 bash -uvx ssl.sh
-chmod 0666 -R ${HOME}/tls
+chmod 0777 -R ${HOME}/tls
 # End
