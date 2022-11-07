@@ -6,6 +6,7 @@
 #######################
 # Elastic Search Node 2
 #######################
+ELASTIC_IMAGE='docker.elastic.co/elasticsearch/elasticsearch'
 ELASTIC_VERSION='7.5.2'
 HOST1='elasticsearch-node1.cloudgeeks.tk'
 HOST2='elasticsearch-node2.cloudgeeks.tk'
@@ -57,7 +58,7 @@ aws route53 change-resource-record-sets --hosted-zone-id $hostedzoneid --change-
 # NETWORK
 #########
 # We will use host network
-
+export ELASTIC_IMAGE
 export ELASTIC_VERSION
 export HOST1
 export HOST2
@@ -95,7 +96,6 @@ services:
     restart: unless-stopped
     volumes:
       - /data:/usr/share/elasticsearch/data
-      - ${HOME}/tls:${CERTS_DIR}
 
     environment:
       - "node.name=${HOST2}"
