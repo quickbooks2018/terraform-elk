@@ -112,6 +112,7 @@ services:
       - "xpack.ml.enabled=false"
       - "xpack.graph.enabled=false"
       - "xpack.watcher.enabled=false"
+      - "xpack.monitoring.collection.enabled=false"
       - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.certificate_authorities=${CERTS_DIR}/CA.crt
