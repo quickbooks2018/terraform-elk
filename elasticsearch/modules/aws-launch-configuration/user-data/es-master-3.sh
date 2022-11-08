@@ -150,7 +150,6 @@ services:
       - "ELASTICSEARCH_HOSTS=${HOST3}"
 
 volumes:
-  es-data:
   metricbeat:
 
 EOF
