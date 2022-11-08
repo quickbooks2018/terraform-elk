@@ -303,6 +303,8 @@ resource "aws_route53_record" "es-node-3" {
 
 # curl -X GET "${ENDPOINT}/_cat/nodes?v"
 
+# curl -X GET "${ENDPOINT}/_cat/indices?v"
+
 ############
 # MetricBeat
 ############
