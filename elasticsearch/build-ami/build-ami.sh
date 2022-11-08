@@ -50,4 +50,18 @@ chmod +x ssl.sh
 bash -uvx ssl.sh
 chmod 0777 -R ${HOME}/tls
 mv tls /tls
+
+#############
+# Docker pull
+##############
+ELASTIC_IMAGE='docker.elastic.co/elasticsearch/elasticsearch'
+ELASTIC_VERSION='7.5.2'
+
+export ELASTIC_IMAGE
+export ELASTIC_VERSION
+
+
+docker pull ${ELASTIC_IMAGE}:${ELASTIC_VERSION}
+docker pull docker.elastic.co/beats/metricbeat:${ELASTIC_VERSION}
+
 # End
