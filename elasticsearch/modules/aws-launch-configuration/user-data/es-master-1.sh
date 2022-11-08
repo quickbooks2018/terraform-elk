@@ -114,6 +114,7 @@ services:
       - "xpack.security.http.ssl.enabled=false"
       - "xpack.ml.enabled=false"
       - "xpack.graph.enabled=false"
+      - "xpack.monitoring.collection.enabled=false"
       - "xpack.watcher.enabled=false"
       - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.verification_mode=certificate
