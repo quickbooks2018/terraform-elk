@@ -293,7 +293,7 @@ resource "aws_route53_record" "es-node-3" {
 
 # ENDPOINT='https://elasticsearch-cluster.cloudgeeks.tk'
       
-# ENDPOINT='https://elasticsearch-node1.cloudgeeks.tk:9200'
+# ENDPOINT='http://elasticsearch-node1.cloudgeeks.tk:9200'
 
 # export ENDPOINT
 
