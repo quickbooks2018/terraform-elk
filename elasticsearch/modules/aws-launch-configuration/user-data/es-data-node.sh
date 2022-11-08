@@ -120,7 +120,6 @@ services:
 
 
 volumes:
-  es-data:
   metricbeat:
 
 EOF
