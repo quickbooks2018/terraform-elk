@@ -45,11 +45,14 @@ df -hT
 lsblk -o name,mountpoint,label,size,uuid
 chmod 0777 /data/
 
-curl -# -LO https://raw.githubusercontent.com/quickbooks2018/cloudflare-tls/main/ssl.sh
-chmod +x ssl.sh
-bash -uvx ssl.sh
-chmod 0777 -R ${HOME}/tls
-mv tls /tls
+###############
+# Disabling TLS
+###############
+#curl -# -LO https://raw.githubusercontent.com/quickbooks2018/cloudflare-tls/main/ssl.sh
+#chmod +x ssl.sh
+#bash -uvx ssl.sh
+#chmod 0777 -R ${HOME}/tls
+#mv tls /tls
 
 #############
 # Docker pull
