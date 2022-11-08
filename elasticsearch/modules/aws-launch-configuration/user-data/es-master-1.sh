@@ -3,6 +3,10 @@
 # OS Ubuntu
 # Maintainer Muhammad Asim <info@cloudgeeks.ca>
 
+# Useful Official Links
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/high-availability-cluster-small-clusters.html
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.17/configuring-tls-docker.html
+
 
 #######################
 # Elastic Search Node 1
@@ -16,8 +20,9 @@ CONTAINER_NAME='elasticsearch-node-1'
 IMAGE='es'
 VERSION='latest'
 
+#####
 # TLS
-# https://www.elastic.co/guide/en/elasticsearch/reference/7.17/configuring-tls-docker.html
+#####
 CERTS_DIR='/usr/share/elasticsearch/config/certificates'
 DOMAIN='cloudgeeks.tk'
 
