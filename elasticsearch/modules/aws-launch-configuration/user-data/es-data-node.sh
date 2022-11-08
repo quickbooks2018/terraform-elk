@@ -22,11 +22,11 @@ VERSION='latest'
 localip=$(curl -fs http://169.254.169.254/latest/meta-data/local-ipv4)
 localip_host=$(echo "$((${-+"(${localip//./"+256*("}))))"}>>24&255))")
 
-#####
-# TLS
-#####
-CERTS_DIR='/usr/share/elasticsearch/config/certificates'
-DOMAIN='cloudgeeks.tk'
+#############
+# Disable TLS
+#############
+#CERTS_DIR='/usr/share/elasticsearch/config/certificates'
+#DOMAIN='cloudgeeks.tk'
 
 #########
 # NETWORK
@@ -44,8 +44,9 @@ export VERSION
 
 cat << EOF > Dockerfile
 FROM ${ELASTIC_IMAGE}:${ELASTIC_VERSION}
-RUN mkdir -p ${CERTS_DIR}
-COPY tls ${CERTS_DIR}
+#RUN mkdir -p ${CERTS_DIR}
+#COPY tls ${CERTS_DIR}
+RUN yes | elasticsearch-plugin install discovery-ec2
 EOF
 
 
@@ -86,12 +87,12 @@ services:
      - bootstrap.memory_lock=true
      - "ES_JAVA_OPTS=-Xms2g -Xmx2g -Des.index.number_of_replicas=1 -Des.enforce.bootstrap.checks=true"
      - "xpack.monitoring.collection.enabled=false"
-     - xpack.security.enabled=true
-     - xpack.security.transport.ssl.enabled=true
-     - xpack.security.transport.ssl.verification_mode=certificate
-     - xpack.security.transport.ssl.certificate_authorities=${CERTS_DIR}/CA.crt
-     - xpack.security.transport.ssl.certificate=${CERTS_DIR}/$DOMAIN.crt
-     - xpack.security.transport.ssl.key=${CERTS_DIR}/$DOMAIN.key
+     - xpack.security.enabled=false
+     - xpack.security.transport.ssl.enabled=false
+ #    - xpack.security.transport.ssl.verification_mode=certificate
+ #    - xpack.security.transport.ssl.certificate_authorities=${CERTS_DIR}/CA.crt
+ #    - xpack.security.transport.ssl.certificate=${CERTS_DIR}/$DOMAIN.crt
+ #    - xpack.security.transport.ssl.key=${CERTS_DIR}/$DOMAIN.key
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9200"]
       interval: 30s
