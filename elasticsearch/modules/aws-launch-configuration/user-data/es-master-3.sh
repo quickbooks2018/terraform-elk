@@ -126,7 +126,7 @@ services:
       - xpack.security.transport.ssl.certificate=${CERTS_DIR}/$DOMAIN.crt
       - xpack.security.transport.ssl.key=${CERTS_DIR}/$DOMAIN.key
     healthcheck:
-      test: ["CMD", "curl", "-v", "telnet://9200"]
+      test: ["CMD", "curl", "-v", "telnet://localhost:9200"]
       interval: 30s
       timeout: 10s
       retries: 30
