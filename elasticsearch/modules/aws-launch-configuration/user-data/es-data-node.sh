@@ -88,11 +88,11 @@ services:
      - "ES_JAVA_OPTS=-Xms2g -Xmx2g -Des.index.number_of_replicas=1 -Des.enforce.bootstrap.checks=true"
      - "xpack.monitoring.collection.enabled=false"
      - xpack.security.enabled=false
-     - xpack.security.transport.ssl.enabled=false
- #    - xpack.security.transport.ssl.verification_mode=certificate
- #    - xpack.security.transport.ssl.certificate_authorities=${CERTS_DIR}/CA.crt
- #    - xpack.security.transport.ssl.certificate=${CERTS_DIR}/$DOMAIN.crt
- #    - xpack.security.transport.ssl.key=${CERTS_DIR}/$DOMAIN.key
+     - xpack.security.transport.ssl.enabled=true
+     - xpack.security.transport.ssl.verification_mode=certificate
+     - xpack.security.transport.ssl.certificate_authorities=${CERTS_DIR}/CA.crt
+     - xpack.security.transport.ssl.certificate=${CERTS_DIR}/$DOMAIN.crt
+     - xpack.security.transport.ssl.key=${CERTS_DIR}/$DOMAIN.key
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9200"]
       interval: 30s
