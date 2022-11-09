@@ -110,7 +110,6 @@ services:
       - "node.master=true" 
       - "node.data=false" 
       - "node.ingest=false"
-      - "node.ml=false"
       - "logger.discovery: DEBUG"
   #    - "logger.level=ERROR"
       - "discovery.seed_hosts=${HOST1},${HOST3}"
@@ -119,7 +118,7 @@ services:
       - "xpack.ml.enabled=false"
       - "xpack.graph.enabled=false"
       - "xpack.watcher.enabled=false"
-      - "xpack.monitoring.collection.enabled=false"
+      - "xpack.monitoring.collection.enabled=true"
   #    - xpack.security.enabled=true
       - ELASTIC_PASSWORD=cloudgeeks
       - xpack.security.transport.ssl.enabled=true
