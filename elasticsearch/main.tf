@@ -304,6 +304,17 @@ resource "aws_route53_record" "es-node-3" {
 # curl -X GET "${ENDPOINT}/_cat/nodes?v"
 
 # curl -X GET "${ENDPOINT}/_cat/indices?v"
+      
+################      
+# Authentication
+################     
+# curl --user elastic:'cloudgeeks' -X GET "${ENDPOINT}/_cluster/health?pretty"
+
+# curl  --user elastic:'cloudgeeks' -X GET "${ENDPOINT}/_cat"
+
+# curl  --user elastic:'cloudgeeks' -X GET "${ENDPOINT}/_cat/nodes?v"
+
+# curl  --user elastic:'cloudgeeks' -X GET "${ENDPOINT}/_cat/indices?v"      
 
 ############
 # MetricBeat
