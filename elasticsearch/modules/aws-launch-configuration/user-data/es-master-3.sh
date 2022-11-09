@@ -109,7 +109,6 @@ services:
       - "node.master=true" 
       - "node.data=false" 
       - "node.ingest=false"
-      - "node.ml=false"
       - "logger.discovery: DEBUG"
    #   - "logger.level=ERROR"
       - "discovery.seed_hosts=${HOST1},${HOST2}"
