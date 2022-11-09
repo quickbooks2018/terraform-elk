@@ -111,16 +111,15 @@ services:
       - "node.master=true" 
       - "node.data=false" 
       - "node.ingest=false"
-      - "node.ml=false"
       - "logger.discovery: DEBUG"
   #    - "logger.level=ERROR"
       - "discovery.seed_hosts=${HOST2},${HOST3}"
       - "cluster.initial_master_nodes=${HOST1},${HOST2},${HOST3}"
       - "ES_JAVA_OPTS=-Xms2g -Xmx2g -Des.index.number_of_replicas=0 -Des.enforce.bootstrap.checks=true"
-      - "xpack.security.http.ssl.enabled=false"
+      - "xpack.security.http.ssl.enabled=true"
       - "xpack.ml.enabled=false"
       - "xpack.graph.enabled=false"
-      - "xpack.monitoring.collection.enabled=false"
+      - "xpack.monitoring.collection.enabled=true"
       - "xpack.watcher.enabled=false"
  #     - xpack.security.enabled=true
       - ELASTIC_PASSWORD=cloudgeeks
