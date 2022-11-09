@@ -77,6 +77,7 @@ cat << EOF > Dockerfile
 FROM ${ELASTIC_IMAGE}:${ELASTIC_VERSION}
 RUN mkdir -p ${CERTS_DIR}
 COPY tls ${CERTS_DIR}
+RUN apt update -y && apt install -y netcat
 RUN yes | elasticsearch-plugin install discovery-ec2
 EOF
 
@@ -126,7 +127,7 @@ services:
       - xpack.security.transport.ssl.certificate=${CERTS_DIR}/$DOMAIN.crt
       - xpack.security.transport.ssl.key=${CERTS_DIR}/$DOMAIN.key
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      test: ["CMD", "telnet", "-vz", "localhost 9200"]
       interval: 30s
       timeout: 10s
       retries: 30
