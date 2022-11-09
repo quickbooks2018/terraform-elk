@@ -126,11 +126,7 @@ services:
       - xpack.security.transport.ssl.certificate_authorities=${CERTS_DIR}/CA.crt
       - xpack.security.transport.ssl.certificate=${CERTS_DIR}/$DOMAIN.crt
       - xpack.security.transport.ssl.key=${CERTS_DIR}/$DOMAIN.key
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200"]
-      interval: 30s
-      timeout: 10s
-      retries: 30
+   
     ulimits:
       memlock:
         soft: -1
