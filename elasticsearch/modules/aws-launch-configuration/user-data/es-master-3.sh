@@ -19,11 +19,11 @@ CONTAINER_NAME='elasticsearch-node-3'
 IMAGE='es'
 VERSION='latest'
 
-#############
-# Disable TLS
-#############
-#CERTS_DIR='/usr/share/elasticsearch/config/certificates'
-#DOMAIN='cloudgeeks.tk'
+############
+# Enable TLS
+############
+CERTS_DIR='/usr/share/elasticsearch/config/certificates'
+DOMAIN='cloudgeeks.tk'
 
 
 #################
@@ -75,8 +75,8 @@ export VERSION
 
 cat << EOF > Dockerfile
 FROM ${ELASTIC_IMAGE}:${ELASTIC_VERSION}
-#RUN mkdir -p ${CERTS_DIR}
-#COPY tls ${CERTS_DIR}
+RUN mkdir -p ${CERTS_DIR}
+COPY tls ${CERTS_DIR}
 RUN yes | elasticsearch-plugin install discovery-ec2
 EOF
 
