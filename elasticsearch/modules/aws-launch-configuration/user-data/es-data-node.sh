@@ -12,7 +12,7 @@
 # Elastic DATA Nodes
 ####################
 ELASTIC_IMAGE='docker.elastic.co/elasticsearch/elasticsearch'
-ELASTIC_VERSION='7.5.2'
+ELASTIC_VERSION='7.17.7'
 HOST1='elasticsearch-node1.cloudgeeks.tk'
 HOST2='elasticsearch-node2.cloudgeeks.tk'
 HOST3='elasticsearch-node3.cloudgeeks.tk'
@@ -25,8 +25,8 @@ localip_host=$(echo "$((${-+"(${localip//./"+256*("}))))"}>>24&255))")
 #############
 # Disable TLS
 #############
-#CERTS_DIR='/usr/share/elasticsearch/config/certificates'
-#DOMAIN='cloudgeeks.tk'
+CERTS_DIR='/usr/share/elasticsearch/config/certificates'
+DOMAIN='cloudgeeks.tk'
 
 #########
 # NETWORK
@@ -44,8 +44,8 @@ export VERSION
 
 cat << EOF > Dockerfile
 FROM ${ELASTIC_IMAGE}:${ELASTIC_VERSION}
-#RUN mkdir -p ${CERTS_DIR}
-#COPY tls ${CERTS_DIR}
+RUN mkdir -p ${CERTS_DIR}
+COPY tls ${CERTS_DIR}
 RUN yes | elasticsearch-plugin install discovery-ec2
 EOF
 
