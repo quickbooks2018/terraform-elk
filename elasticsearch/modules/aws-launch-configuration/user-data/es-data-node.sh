@@ -12,7 +12,7 @@
 # Elastic DATA Nodes
 ####################
 ELASTIC_IMAGE='docker.elastic.co/elasticsearch/elasticsearch'
-ELASTIC_VERSION='7.17.6'
+ELASTIC_VERSION='7.17.7'
 HOST1='elasticsearch-node1.cloudgeeks.tk'
 HOST2='elasticsearch-node2.cloudgeeks.tk'
 HOST3='elasticsearch-node3.cloudgeeks.tk'
@@ -123,5 +123,5 @@ volumes:
 
 EOF
 
-docker compose -p elasticsearch up -d
+docker compose -p elasticsearch up -d --build
 # End
