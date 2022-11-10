@@ -22,7 +22,7 @@ rm -f *.zip
 aws --version
 
 
-ELASTIC_VERSION="7.5.2"
+ELASTIC_VERSION="7.17.7"
 export ELASTIC_VERSION
 
 cat << EOF > docker-compose.yaml
