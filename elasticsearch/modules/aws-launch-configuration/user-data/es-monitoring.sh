@@ -30,8 +30,8 @@ export ELASTIC_VERSION
 export KIBANA
 
 cat <<EOF > $PWD/kibana.yml
-elasticsearch.username: "elastic"
-elasticsearch.password: "cloudgeeks" 
+elasticsearch.username: elastic
+elasticsearch.password: cloudgeeks
 EOF
 
 cat <<EOF > Dockerfile
