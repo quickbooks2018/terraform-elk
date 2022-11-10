@@ -49,7 +49,7 @@ services:
     environment:
       - KIBANA_ELASTICSEARCH_URL="http://elasticsearch-node1.cloudgeeks.tk:9200"
     volumes:
-        - kibana:/bitnami
+        - kibana:/bitnami/kibana
 volumes:
   grafana_data: {}
   kibana:
