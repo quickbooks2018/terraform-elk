@@ -78,6 +78,7 @@ services:
      - node.data=true
      - node.ingest=true
      - "logger.discovery: DEBUG"
+     - "xpack.ml.enabled=false"
    #  - logger.level=ERROR
      - data=hot
      - cluster.name=es-cluster
