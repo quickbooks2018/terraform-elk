@@ -122,7 +122,7 @@ services:
       - xpack.security.enabled=true
       - ELASTIC_PASSWORD=cloudgeeks
       - "xpack.security.http.ssl.enabled=false"
-      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.enabled=false
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.certificate_authorities=${CERTS_DIR}/CA.crt
       - xpack.security.transport.ssl.certificate=${CERTS_DIR}/$DOMAIN.crt
