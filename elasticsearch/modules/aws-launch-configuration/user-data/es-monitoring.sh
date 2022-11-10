@@ -63,6 +63,9 @@ services:
     restart: unless-stopped
     ports:
       - '5601:5601'
+    configs:
+      - source: kibana_config
+        target: /usr/share/kibana/config/kibana.yml
     environment:
       ELASTICSEARCH_URL: "http://elasticsearch-node1.cloudgeeks.tk:9200"
    
