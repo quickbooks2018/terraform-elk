@@ -118,7 +118,7 @@ services:
       - "xpack.graph.enabled=false"
       - "xpack.watcher.enabled=false"
       - "xpack.monitoring.collection.enabled=false"
-   #   - xpack.security.enabled=true
+      - xpack.security.enabled=true
       - ELASTIC_PASSWORD=cloudgeeks
       - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.verification_mode=certificate
