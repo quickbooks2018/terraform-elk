@@ -77,7 +77,6 @@ services:
      - node.master=false
      - node.data=true
      - node.ingest=true
-     - node.ml=false
      - "logger.discovery: DEBUG"
    #  - logger.level=ERROR
      - data=hot
@@ -87,7 +86,7 @@ services:
      - bootstrap.memory_lock=true
      - "ES_JAVA_OPTS=-Xms2g -Xmx2g -Des.index.number_of_replicas=1 -Des.enforce.bootstrap.checks=true"
      - "xpack.monitoring.collection.enabled=false"
- #    - xpack.security.enabled=true
+     - xpack.security.enabled=true
      - ELASTIC_PASSWORD=cloudgeeks
      - xpack.security.transport.ssl.enabled=true
      - xpack.security.transport.ssl.verification_mode=certificate
