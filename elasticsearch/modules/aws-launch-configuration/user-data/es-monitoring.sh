@@ -72,6 +72,6 @@ volumes:
   kibana:
 EOF
 
-docker compose -p grafana up -d
+docker compose -p grafana up -d --build
 
 # END
