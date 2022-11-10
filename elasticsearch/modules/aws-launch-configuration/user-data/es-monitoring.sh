@@ -33,7 +33,7 @@ export KIBANA
 cat <<EOF > $PWD/kibana.yml
 elasticsearch.username: "elastic"
 elasticsearch.password: "cloudgeeks"
-elasticsearch.hosts: [ "https://elasticsearch-cluster.cloudgeeks.tk" ]
+elasticsearch.hosts: [ "http://elasticsearch-node1.cloudgeeks.tk","http://elasticsearch-node2.cloudgeeks.tk","http://elasticsearch-node3.cloudgeeks.tk" ]
 EOF
 
 cat <<EOF > Dockerfile
