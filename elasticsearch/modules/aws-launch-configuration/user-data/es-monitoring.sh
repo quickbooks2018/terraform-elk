@@ -23,7 +23,20 @@ aws --version
 
 
 ELASTIC_VERSION="7.17.7"
+KIBANA="docker.elastic.co/kibana/kibana"
+
 export ELASTIC_VERSION
+export KIBANA
+
+cat <<EOF > $PWD/kibana.yml
+elasticsearch.username: "elastic"
+elasticsearch.password: "cloudgeeks" 
+EOF
+
+cat <<EOF > Dockerfile
+FROM ${KIBANA}:${ELASTIC_VERSION}
+COPY kibana.yml /usr/share/kibana/config/kibana.yml
+EOF
 
 cat << EOF > docker-compose.yaml
 services:
@@ -41,15 +54,18 @@ services:
       - grafana_data:/var/lib/grafana
 
   kibana:
-    image: bitnami/kibana:${ELASTIC_VERSION}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: custom_kibana:kibana
     container_name: kibana
     restart: unless-stopped
     ports:
       - '5601:5601'
     environment:
-      - KIBANA_ELASTICSEARCH_URL=elasticsearch-node1.cloudgeeks.tk:9200
+      ELASTICSEARCH_URL: "https://elasticsearch-cluster.cloudgeeks.tk"
     volumes:
-        - kibana:/bitnami/kibana
+        - kibana:/usr/share/kibana/config/kibana.yml
 volumes:
   grafana_data: {}
   kibana:
