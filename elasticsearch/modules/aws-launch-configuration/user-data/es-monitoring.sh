@@ -47,7 +47,7 @@ services:
     ports:
       - '5601:5601'
     environment:
-      - KIBANA_ELASTICSEARCH_URL="elasticsearch-node1.cloudgeeks.tk:9200"
+      - KIBANA_ELASTICSEARCH_URL=elasticsearch-node1.cloudgeeks.tk:9200
     volumes:
         - kibana:/bitnami/kibana
 volumes:
