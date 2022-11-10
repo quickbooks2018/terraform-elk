@@ -157,5 +157,5 @@ volumes:
 
 EOF
 
-docker compose -p elasticsearch up -d
+docker compose -p elasticsearch up -d --build
 # End
