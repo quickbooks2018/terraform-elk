@@ -58,7 +58,7 @@ mv tls /tls
 # Docker pull
 ##############
 ELASTIC_IMAGE='docker.elastic.co/elasticsearch/elasticsearch'
-ELASTIC_VERSION='7.17.6'
+ELASTIC_VERSION='7.17.7'
 
 export ELASTIC_IMAGE
 export ELASTIC_VERSION
