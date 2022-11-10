@@ -64,7 +64,7 @@ services:
     ports:
       - '5601:5601'
     environment:
-      ELASTICSEARCH_URL: "https://elasticsearch-cluster.cloudgeeks.tk"
+      ELASTICSEARCH_URL: "http://elasticsearch-node1.cloudgeeks.tk:9200"
    
 volumes:
   grafana_data: {}
