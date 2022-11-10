@@ -31,8 +31,8 @@ export ELASTIC_VERSION
 export KIBANA
 
 cat <<EOF > $PWD/kibana.yml
-elasticsearch.username: "jacknich"
-elasticsearch.password: "t0pS3cr3t"
+elasticsearch.username: "elastic"
+elasticsearch.password: "cloudgeeks"
 elasticsearch.hosts: [ "https://elasticsearch-cluster.cloudgeeks.tk" ]
 EOF
 
