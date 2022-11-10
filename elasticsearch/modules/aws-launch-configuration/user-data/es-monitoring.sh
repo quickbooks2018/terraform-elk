@@ -3,6 +3,7 @@
 # OS Ubuntu
 # Maintainer Muhammad Asim <info@cloudgeeks.ca>
 # https://www.elastic.co/guide/en/kibana/current/docker.html
+# https://www.elastic.co/guide/en/kibana/current/settings.html
 
 ######################################
 # Docker & Docker Compose Installation
@@ -32,7 +33,7 @@ export KIBANA
 cat <<EOF > $PWD/kibana.yml
 elasticsearch.username: "elastic"
 elasticsearch.password: "cloudgeeks"
-elasticsearch.hosts: "https://elasticsearch-cluster.cloudgeeks.tk"
+elasticsearch.hosts: [ "https://elasticsearch-cluster.cloudgeeks.tk" ]
 EOF
 
 cat <<EOF > Dockerfile
