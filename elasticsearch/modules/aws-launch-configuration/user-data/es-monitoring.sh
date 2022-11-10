@@ -33,6 +33,7 @@ cat <<EOF > $PWD/kibana.yml
 elasticsearch.username: "elastic"
 elasticsearch.password: "cloudgeeks"
 elasticsearch.hosts: [ "https://elasticsearch-cluster.cloudgeeks.tk" ]
+elasticsearch.ssl.verificationMode: "none"
 EOF
 
 cat <<EOF > Dockerfile
