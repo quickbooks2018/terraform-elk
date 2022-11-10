@@ -17,16 +17,9 @@ resource "aws_autoscaling_group" "autoscaling-group" {
     value               = var.value
   }
 
-  //  tag {
-  //    key                 = "AmazonECSManaged"
-  //    propagate_at_launch = true
-  //    value               = ""
-  //  }
-
-
-
-  lifecycle {
-    create_before_destroy = true
+  
+   lifecycle {
+    prevent_destroy = true
   }
 
 
