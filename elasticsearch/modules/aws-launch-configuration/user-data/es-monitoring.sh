@@ -67,7 +67,6 @@ services:
    
 volumes:
   grafana_data: {}
-  kibana:
 EOF
 
 docker compose -p grafana up -d --build
