@@ -22,9 +22,9 @@ VERSION='latest'
 localip=$(curl -fs http://169.254.169.254/latest/meta-data/local-ipv4)
 localip_host=$(echo "$((${-+"(${localip//./"+256*("}))))"}>>24&255))")
 
-#############
-# Disable TLS
-#############
+############
+# Enable TLS
+############
 CERTS_DIR='/usr/share/elasticsearch/config/certificates'
 DOMAIN='cloudgeeks.tk'
 
