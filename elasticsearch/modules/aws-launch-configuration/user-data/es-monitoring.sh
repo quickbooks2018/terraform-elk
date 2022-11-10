@@ -30,8 +30,9 @@ export ELASTIC_VERSION
 export KIBANA
 
 cat <<EOF > $PWD/kibana.yml
-elasticsearch.username: elastic
-elasticsearch.password: cloudgeeks
+elasticsearch.username: "elastic"
+elasticsearch.password: "cloudgeeks"
+elasticsearch.hosts: [ "https://elasticsearch-cluster.cloudgeeks.tk:9200" ]
 EOF
 
 cat <<EOF > Dockerfile
@@ -63,9 +64,6 @@ services:
     restart: unless-stopped
     ports:
       - '5601:5601'
-    
-    environment:
-      ELASTICSEARCH_URL: "http://elasticsearch-node1.cloudgeeks.tk:9200"
    
 volumes:
   grafana_data: {}
