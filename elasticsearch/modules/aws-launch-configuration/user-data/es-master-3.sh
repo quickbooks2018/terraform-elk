@@ -11,7 +11,7 @@
 # Elastic Search Node 3
 #######################
 ELASTIC_IMAGE='docker.elastic.co/elasticsearch/elasticsearch'
-ELASTIC_VERSION='7.5.2'
+ELASTIC_VERSION='7.17.6'
 HOST1='elasticsearch-node1.cloudgeeks.tk'
 HOST2='elasticsearch-node2.cloudgeeks.tk'
 HOST3='elasticsearch-node3.cloudgeeks.tk'
