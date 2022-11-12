@@ -77,7 +77,7 @@ cat << EOF > Dockerfile
 FROM ${ELASTIC_IMAGE}:${ELASTIC_VERSION}
 RUN mkdir -p ${CERTS_DIR}
 COPY tls ${CERTS_DIR}
-RUN yes | elasticsearch-plugin install discovery-ec2
+#RUN yes | elasticsearch-plugin install discovery-ec2
 EOF
 
 cat << EOF > docker-compose.yaml
