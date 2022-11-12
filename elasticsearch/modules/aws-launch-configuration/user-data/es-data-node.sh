@@ -104,7 +104,7 @@ services:
     network_mode: host
     restart: unless-stopped
     container_name: metricbeat
-    hostname: metricbeat-${HOST1}
+    hostname: metricbeat-${localip}
     command: ["--strict.perms=false", "-system.hostfs=/hostfs"]
     volumes:
       - /proc:/hostfs/proc:ro
@@ -113,7 +113,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - metricbeat:/usr/share/metricbeat/data
     environment:
-      - "ELASTICSEARCH_HOSTS=${HOST1}"
+      - "ELASTICSEARCH_HOSTS=${localip}"
 
 
 
