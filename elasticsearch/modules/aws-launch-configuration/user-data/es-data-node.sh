@@ -114,7 +114,7 @@ services:
       - metricbeat:/usr/share/metricbeat/data
     environment:
       - "ELASTICSEARCH_HOSTS=elasticsearch:9200"
-      - - ELASTIC_PASSWORD=cloudgeeks
+      - ELASTIC_PASSWORD=cloudgeeks
 
 
 
