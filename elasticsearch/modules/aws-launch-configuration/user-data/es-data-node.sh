@@ -113,7 +113,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - metricbeat:/usr/share/metricbeat/data
     environment:
-      - "ELASTICSEARCH_HOSTS=${localip}"
+      - "ELASTICSEARCH_HOSTS=elasticsearch:9200"
+      - - ELASTIC_PASSWORD=cloudgeeks
 
 
 
