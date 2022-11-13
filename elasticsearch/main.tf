@@ -419,7 +419,7 @@ resource "aws_lb_target_group" "elastic-search-nodes" {
     timeout             = "25"
     healthy_threshold   = "2"
     unhealthy_threshold = "3"
-    matcher             = "401"
+    matcher             = "200"
   }
 
   deregistration_delay = "360"
