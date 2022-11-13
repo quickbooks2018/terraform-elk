@@ -153,8 +153,8 @@ services:
     hostname: ${HOST2}
     restart: unless-stopped
     ports:
-      - 9200:9200
-      - 9300:9300
+      - ${localip}:9200:9200
+      - ${localip}:9300:9300
     volumes:
       - /data:/usr/share/elasticsearch/data
 
