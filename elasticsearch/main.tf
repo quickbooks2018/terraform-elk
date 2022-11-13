@@ -252,50 +252,6 @@ resource "aws_route53_record" "elastic-search-cluster-end-point" {
   depends_on = [module.alb-backend-elasticsearch.aws-alb-dns-name]
 }
 
-#############################
-# ElasticSearch Cluster Node1
-#############################
-resource "aws_route53_record" "es-node-1" {
-  zone_id = aws_route53_zone.cloudgeeks-private-hosted-zone.id
-  name    = "elasticsearch-node1"
-  type    = "A"
-  ttl     = "10"
-  records = ["1.2.3.4"]
-}
-
-#############################
-# ElasticSearch Cluster Node2
-#############################
-resource "aws_route53_record" "es-node-2" {
-  zone_id = aws_route53_zone.cloudgeeks-private-hosted-zone.id
-  name    = "elasticsearch-node2"
-  type    = "A"
-  ttl     = "10"
-  records = ["1.2.3.4"]
-}
-
-#############################
-# ElasticSearch Cluster Node3
-#############################
-resource "aws_route53_record" "es-node-3" {
-  zone_id = aws_route53_zone.cloudgeeks-private-hosted-zone.id
-  name    = "elasticsearch-node3"
-  type    = "A"
-  ttl     = "10"
-  records = ["1.2.3.4"]
-}
-
- 
-#################################
-# ElasticSearch Monitoring Kibana
-#################################
-resource "aws_route53_record" "kibana" {
-  zone_id = aws_route53_zone.cloudgeeks-private-hosted-zone.id
-  name    = "kibana"
-  type    = "A"
-  ttl     = "10"
-  records = ["1.2.3.4"]
-}
      
       
 
