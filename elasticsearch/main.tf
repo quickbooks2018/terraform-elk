@@ -285,6 +285,19 @@ resource "aws_route53_record" "es-node-3" {
   records = ["1.2.3.4"]
 }
 
+ 
+#################################
+# ElasticSearch Monitoring Kibana
+#################################
+resource "aws_route53_record" "kibana" {
+  zone_id = aws_route53_zone.cloudgeeks-private-hosted-zone.id
+  name    = "kibana"
+  type    = "A"
+  ttl     = "10"
+  records = ["1.2.3.4"]
+}
+     
+      
 
 ###############################
 # ElasticSearch Docker Cluster
