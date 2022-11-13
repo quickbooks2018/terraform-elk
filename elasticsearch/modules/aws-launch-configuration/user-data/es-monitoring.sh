@@ -42,6 +42,37 @@ FROM ${KIBANA}:${ELASTIC_VERSION}
 COPY kibana.yml /usr/share/kibana/config/kibana.yml
 EOF
 
+#########
+# Route53
+#########
+KIBANA_URL='kiabana.cloudgeeks.tk'
+hostedzoneid=$(aws route53 list-hosted-zones-by-name --output json |  jq --arg name "${zonename}." -r '.HostedZones | .[] | select(.Name=="\($name)") | .Id' | awk -F '/' '{print $3}')
+file=/tmp/record.json
+
+cat << EOF > $file
+{
+  "Comment": "Update the A record set",
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "${KIBANA_URL}",
+        "Type": "A",
+        "TTL": 10,
+        "ResourceRecords": [
+          {
+            "Value": "$localip"
+          }
+        ]
+      }
+    }
+  ]
+}
+EOF
+
+aws route53 change-resource-record-sets --hosted-zone-id $hostedzoneid --change-batch file://$file
+
+
 cat << EOF > docker-compose.yaml
 services:
 
