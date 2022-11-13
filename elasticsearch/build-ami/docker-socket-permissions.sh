@@ -21,13 +21,16 @@ ReloadPropagatedFrom=docker.service
 
 [Service]
 Type=oneshot
-ExecStart=${HOME}/docker-socket.sh
-ExecReload=${HOME}/docker-socket.sh
+ExecStart=/bin/bash ${HOME}/docker-socket.sh
+ExecReload=/bin/bash ${HOME}/docker-socket.sh
 RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
 EOF
+
+
+systemctl daemon-reload
 
 systemctl start docker-socket.service
 
