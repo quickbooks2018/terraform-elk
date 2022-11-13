@@ -11,25 +11,122 @@
 # Elastic Search Node 2
 #######################
 ELASTIC_IMAGE='docker.elastic.co/elasticsearch/elasticsearch'
-ELASTIC_VERSION='7.17.7'
+ELASTIC_VERSION='8.5.0'
 HOST1='elasticsearch-node1.cloudgeeks.tk'
 HOST2='elasticsearch-node2.cloudgeeks.tk'
 HOST3='elasticsearch-node3.cloudgeeks.tk'
-CONTAINER_NAME='elasticsearch-node-2'
-IMAGE='es'
-VERSION='latest'
+ELASTIC_CONTAINER_NAME='master-node-2'
+
 
 ############
-# Enable TLS
+# MetricBeat
 ############
-CERTS_DIR='/usr/share/elasticsearch/config/certificates'
-DOMAIN='cloudgeeks.tk'
+# https://raw.githubusercontent.com/elastic/beats/8.5/deploy/docker/metricbeat.docker.yml
+echo '
+---
+metricbeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    # Reload module configs as they change:
+    reload.enabled: false
+
+metricbeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+
+metricbeat.modules:
+- module: docker
+  metricsets:
+    - "container"
+    - "cpu"
+    - "diskio"
+    - "healthcheck"
+    - "info"
+    #- "image"
+    - "memory"
+    - "network"
+  hosts: ["unix:///var/run/docker.sock"]
+  period: 10s
+  enabled: true
+
+processors:
+  - add_cloud_metadata: ~
+
+output.elasticsearch:
+  hosts: 'http://:elasticsearch:9200' ' > $PWD/metricbeat.yml
+
+
+###########
+# HeartBeat
+###########
+# https://raw.githubusercontent.com/elastic/beats/8.5/deploy/docker/heartbeat.docker.yml
+echo '
+---
+heartbeat.monitors:
+- type: http
+  schedule: '@every 5s'
+  urls:
+    - http://elasticsearch:9200
+    - http://kibana:5601
+
+- type: icmp
+  schedule: '@every 5s'
+  hosts:
+    - elasticsearch
+    - kibana
+
+processors:
+- add_cloud_metadata: ~
+
+output.elasticsearch:
+  hosts: 'http://:elasticsearch:9200' ' > heartbeat.yml
+
+#########
+#FileBeat
+#########
+# https://raw.githubusercontent.com/elastic/beats/8.5/deploy/docker/filebeat.docker.yml
+echo '
+---
+filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+
+processors:
+- add_cloud_metadata: ~
+
+output.elasticsearch:
+  hosts: 'http://elasticsearch:9200' ' > filebeat.yml
+
+############
+# APM Server
+############
+# https://raw.githubusercontent.com/elastic/apm-server/master/apm-server.docker.yml
+echo '
+---
+apm-server:
+  host: 0.0.0.0:8200
+  ssl.enabled: false
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+
+
+monitoring:
+  enabled: true '  > apm-server.yml
 
 #################
 # Route53 Section
 #################
 zonename='cloudgeeks.tk'
 localip=$(curl -fs http://169.254.169.254/latest/meta-data/local-ipv4)
+localip_host=$(echo "$((${-+"(${localip//./"+256*("}))))"}>>24&255))")
 hostedzoneid=$(aws route53 list-hosted-zones-by-name --output json |  jq --arg name "${zonename}." -r '.HostedZones | .[] | select(.Name=="\($name)") | .Id' | awk -F '/' '{print $3}')
 file=/tmp/record.json
 
@@ -68,39 +165,30 @@ export ELASTIC_VERSION
 export HOST1
 export HOST2
 export HOST3
-export CONTAINER_NAME
-export DOMAIN
-export CERTS_DIR
-export IMAGE
-export VERSION
+export ELASTIC_CONTAINER_NAME
 
-cat << EOF > Dockerfile
-FROM ${ELASTIC_IMAGE}:${ELASTIC_VERSION}
-RUN mkdir -p ${CERTS_DIR}
-COPY tls ${CERTS_DIR}
-EOF
 
 cat << EOF > docker-compose.yaml
 services:
 
   elasticsearch:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: ${IMAGE}:${VERSION}
+    image: ${ELASTIC_IMAGE}:${ELASTIC_VERSION}
     shm_size: '2gb'   # shared mem
-    network_mode: host
     logging:
        driver: "awslogs"
        options:
          awslogs-group: "elasticsearch"
          awslogs-region: "us-east-1"
-         awslogs-stream: ${CONTAINER_NAME}
-    container_name: ${CONTAINER_NAME}
+         awslogs-stream: ${ELASTIC_CONTAINER_NAME}
+    ELASTIC_CONTAINER_NAME: ${ELASTIC_CONTAINER_NAME}
     hostname: ${HOST2}
     restart: unless-stopped
+    ports:
+      - 9200:9200
+      - 9300:9300
     volumes:
       - /data:/usr/share/elasticsearch/data
+      - /data:/usr/share/elasticsearch/logs
 
     environment:
       - "node.name=${HOST2}"
@@ -118,39 +206,70 @@ services:
       - "xpack.graph.enabled=false"
       - "xpack.watcher.enabled=false"
       - "xpack.monitoring.collection.enabled=true"
-      - xpack.security.enabled=true
+      - xpack.security.enabled=false
       - ELASTIC_PASSWORD=cloudgeeks
       - "xpack.security.http.ssl.enabled=false"
       - xpack.security.transport.ssl.enabled=false
-      - xpack.security.transport.ssl.verification_mode=certificate
-      - xpack.security.transport.ssl.certificate_authorities=${CERTS_DIR}/CA.crt
-      - xpack.security.transport.ssl.certificate=${CERTS_DIR}/$DOMAIN.crt
-      - xpack.security.transport.ssl.key=${CERTS_DIR}/$DOMAIN.key
    
     ulimits:
       memlock:
         soft: -1
         hard: -1
 
-  metricbeat:                                                   
+  metricbeat:
     image: docker.elastic.co/beats/metricbeat:${ELASTIC_VERSION}
-    network_mode: host
-    restart: unless-stopped
     container_name: metricbeat
-    hostname: metricbeat-${HOST2}
+    restart: unless-stopped
+    depends_on: ['elasticsearch']
+    hostname: metricbeat
     command: ["--strict.perms=false", "-system.hostfs=/hostfs"]
+    secrets:
+      - source: metricbeat.yml
+        target: /usr/share/metricbeat/metricbeat.yml
     volumes:
       - /proc:/hostfs/proc:ro
       - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
       - /:/hostfs:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-      - metricbeat:/usr/share/metricbeat/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  heartbeat:
+    image: docker.elastic.co/beats/heartbeat:${ELASTIC_VERSION}
+    depends_on: ['elasticsearch']
+    command: -e --strict.perms=false
+    secrets:
+      - source: heartbeat.yml
+        target: /usr/share/heartbeat/heartbeat.yml
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:${ELASTIC_VERSION}
+    user: root
+    depends_on: ['elasticsearch']
+    command: -e --strict.perms=false
+    secrets:
+      - source: filebeat.yml
+        target: /usr/share/filebeat/filebeat.yml
+    volumes:
+      - /data:/usr/share/elasticsearch/logs
+      - /var/lib/docker/containers:/hostfs/var/lib/docker/containers
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
-      - "ELASTICSEARCH_HOSTS=${HOST2}"
+      - system.hostfs=/hostfs
+    restart: unless-stopped
+    healthcheck:
+      test: filebeat --strict.perms=false test config
 
-volumes:
-  metricbeat:
 
+  apm_server:
+    image: docker.elastic.co/apm/apm-server:${ELASTIC_VERSION}
+    depends_on: ['elasticsearch']
+    command: -e --strict.perms=false
+
+    secrets:
+      - source: apm-server.yml
+        target: /usr/share/apm-server/apm-server.yml
+    restart: unless-stopped
 EOF
 
 docker compose -p elasticsearch up -d --build
