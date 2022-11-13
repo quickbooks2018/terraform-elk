@@ -11,7 +11,7 @@
 # Elastic Search Node 3
 #######################
 ELASTIC_IMAGE='docker.elastic.co/elasticsearch/elasticsearch'
-ELASTIC_VERSION='8.5.0'
+ELASTIC_VERSION='7.17.7'
 HOST1='elasticsearch-node1.cloudgeeks.tk'
 HOST2='elasticsearch-node2.cloudgeeks.tk'
 HOST3='elasticsearch-node3.cloudgeeks.tk'
@@ -56,52 +56,6 @@ output.elasticsearch:
   hosts: 'http://:elasticsearch:9200' ' > $PWD/metricbeat.yml
 
 
-###########
-# HeartBeat
-###########
-# https://raw.githubusercontent.com/elastic/beats/8.5/deploy/docker/heartbeat.docker.yml
-echo '
----
-heartbeat.monitors:
-- type: http
-  schedule: '@every 5s'
-  urls:
-    - http://elasticsearch:9200
-    - http://kibana:5601
-
-- type: icmp
-  schedule: '@every 5s'
-  hosts:
-    - elasticsearch
-    - kibana
-
-processors:
-- add_cloud_metadata: ~
-
-output.elasticsearch:
-  hosts: 'http://:elasticsearch:9200' ' > heartbeat.yml
-
-##########
-# FileBeat
-##########
-# https://raw.githubusercontent.com/elastic/beats/8.5/deploy/docker/filebeat.docker.yml
-echo '
----
-filebeat.config:
-  modules:
-    path: ${path.config}/modules.d/*.yml
-    reload.enabled: false
-
-filebeat.autodiscover:
-  providers:
-    - type: docker
-      hints.enabled: true
-
-processors:
-- add_cloud_metadata: ~
-
-output.elasticsearch:
-  hosts: 'http://elasticsearch:9200' ' > filebeat.yml
 
 ############
 # APM Server
@@ -157,7 +111,6 @@ aws route53 change-resource-record-sets --hosted-zone-id $hostedzoneid --change-
 #########
 # NETWORK
 #########
-# We will use host network
 export ELASTIC_IMAGE
 export ELASTIC_VERSION
 export HOST1
@@ -165,6 +118,22 @@ export HOST2
 export HOST3
 export ELASTIC_CONTAINER_NAME
 
+############
+# MetricBeat
+############
+cat << EOF > MetricBeatDockerfile
+FROM docker.elastic.co/beats/metricbeat:${ELASTIC_VERSION}
+COPY metricbeat.yml /usr/share/metricbeat/metricbeat.yml
+EOF
+
+
+############
+# APM Server
+############
+cat << EOF > APMServerDockerfile
+FROM docker.elastic.co/apm/apm-server:${ELASTIC_VERSION}
+COPY apm-server.yml /usr/share/apm-server/apm-server.yml
+EOF
 
 cat << EOF > docker-compose.yaml
 services:
@@ -178,7 +147,7 @@ services:
          awslogs-group: "elasticsearch"
          awslogs-region: "us-east-1"
          awslogs-stream: ${ELASTIC_CONTAINER_NAME}
-    ELASTIC_CONTAINER_NAME: ${ELASTIC_CONTAINER_NAME}
+    container_name: ${ELASTIC_CONTAINER_NAME}
     hostname: ${HOST3}
     restart: unless-stopped
     ports:
@@ -213,59 +182,31 @@ services:
         soft: -1
         hard: -1
 
- metricbeat:
-    image: docker.elastic.co/beats/metricbeat:${ELASTIC_VERSION}
-    container_name: metricbeat
-    restart: unless-stopped
-    depends_on: ['elasticsearch']
-    hostname: metricbeat
-    command: ["--strict.perms=false", "-system.hostfs=/hostfs"]
-    secrets:
-      - source: metricbeat.yml
-        target: /usr/share/metricbeat/metricbeat.yml
-    volumes:
-      - /proc:/hostfs/proc:ro
-      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
-      - /:/hostfs:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+  metricbeat:
+      build:
+        context: .
+        dockerfile: MetricBeatDockerfile
+      image: metricbeat:metricbeat
+      container_name: metricbeat
+      restart: unless-stopped
+      depends_on: ['elasticsearch']
+      hostname: metricbeat
+      command: ["--strict.perms=false", "-system.hostfs=/hostfs"]
 
-  heartbeat:
-    image: docker.elastic.co/beats/heartbeat:${ELASTIC_VERSION}
-    depends_on: ['elasticsearch']
-    command: -e --strict.perms=false
-    secrets:
-      - source: heartbeat.yml
-        target: /usr/share/heartbeat/heartbeat.yml
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-
-  filebeat:
-    image: docker.elastic.co/beats/filebeat:${ELASTIC_VERSION}
-    user: root
-    depends_on: ['elasticsearch']
-    command: -e --strict.perms=false
-    secrets:
-      - source: filebeat.yml
-        target: /usr/share/filebeat/filebeat.yml
-    volumes:
-      - /data:/usr/share/elasticsearch/logs
-      - /var/lib/docker/containers:/hostfs/var/lib/docker/containers
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    environment:
-      - system.hostfs=/hostfs
-    restart: unless-stopped
-    healthcheck:
-      test: filebeat --strict.perms=false test config
-
+      volumes:
+        - /proc:/hostfs/proc:ro
+        - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+        - /:/hostfs:ro
+        - /var/run/docker.sock:/var/run/docker.sock:ro
 
   apm_server:
-    image: docker.elastic.co/apm/apm-server:${ELASTIC_VERSION}
+    build:
+     context: .
+     dockerfile: APMServerDockerfile
+    image: apm:apm
     depends_on: ['elasticsearch']
+    container_name: apm
     command: -e --strict.perms=false
-
-    secrets:
-      - source: apm-server.yml
-        target: /usr/share/apm-server/apm-server.yml
     restart: unless-stopped
 EOF
 
