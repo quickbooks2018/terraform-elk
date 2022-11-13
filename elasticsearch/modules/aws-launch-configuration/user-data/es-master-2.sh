@@ -63,7 +63,7 @@ EOF
 ############
 # APM Server
 ############
-KIBANA_URL='kiabana.cloudgeeks.tk'
+KIBANA_URL='kibana.cloudgeeks.tk'
 # https://raw.githubusercontent.com/elastic/apm-server/master/apm-server.docker.yml
 cat << EOF > apm-server.yml
 ---
