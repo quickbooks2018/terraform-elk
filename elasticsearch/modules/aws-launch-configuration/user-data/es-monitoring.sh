@@ -50,7 +50,7 @@ EOF
 #########
 # Route53
 #########
-KIBANA_URL='kiabana.cloudgeeks.tk'
+KIBANA_URL='kibana.cloudgeeks.tk'
 hostedzoneid=$(aws route53 list-hosted-zones-by-name --output json |  jq --arg name "${zonename}." -r '.HostedZones | .[] | select(.Name=="\($name)") | .Id' | awk -F '/' '{print $3}')
 file=/tmp/record.json
 
