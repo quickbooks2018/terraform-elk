@@ -83,9 +83,9 @@ processors:
 output.elasticsearch:
   hosts: 'http://:elasticsearch:9200' ' > heartbeat.yml
 
-#########
-#FileBeat
-#########
+##########
+# FileBeat
+##########
 # https://raw.githubusercontent.com/elastic/beats/8.5/deploy/docker/filebeat.docker.yml
 echo '
 ---
