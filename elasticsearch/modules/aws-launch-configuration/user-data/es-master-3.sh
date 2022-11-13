@@ -7,6 +7,9 @@
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/high-availability-cluster-small-clusters.html
 # https://www.elastic.co/guide/en/elasticsearch/reference/7.17/configuring-tls-docker.html
 
+zonename='cloudgeeks.tk'
+localip=$(curl -fs http://169.254.169.254/latest/meta-data/local-ipv4)
+localip_host=$(echo "$((${-+"(${localip//./"+256*("}))))"}>>24&255))")
 #######################
 # Elastic Search Node 3
 #######################
@@ -78,9 +81,6 @@ monitoring:
 #################
 # Route53 Section
 #################
-zonename='cloudgeeks.tk'
-localip=$(curl -fs http://169.254.169.254/latest/meta-data/local-ipv4)
-localip_host=$(echo "$((${-+"(${localip//./"+256*("}))))"}>>24&255))")
 hostedzoneid=$(aws route53 list-hosted-zones-by-name --output json |  jq --arg name "${zonename}." -r '.HostedZones | .[] | select(.Name=="\($name)") | .Id' | awk -F '/' '{print $3}')
 file=/tmp/record.json
 
@@ -141,6 +141,7 @@ services:
   elasticsearch:
     image: ${ELASTIC_IMAGE}:${ELASTIC_VERSION}
     shm_size: '2gb'   # shared mem
+    network_mode: host
     logging:
        driver: "awslogs"
        options:
@@ -150,12 +151,8 @@ services:
     container_name: ${ELASTIC_CONTAINER_NAME}
     hostname: ${HOST3}
     restart: unless-stopped
-    ports:
-      - ${localip}:9200:9200
-      - ${localip}:9300:9300
     volumes:
       - /data:/usr/share/elasticsearch/data
-      - /data:/usr/share/elasticsearch/logs
 
     environment:
       - "node.name=${HOST3}"
