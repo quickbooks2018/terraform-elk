@@ -112,7 +112,6 @@ aws route53 change-resource-record-sets --hosted-zone-id $hostedzoneid --change-
 #########
 # NETWORK
 #########
-# We will use host network
 export ELASTIC_IMAGE
 export ELASTIC_VERSION
 export HOST1
