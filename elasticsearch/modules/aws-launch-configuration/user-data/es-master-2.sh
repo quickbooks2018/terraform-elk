@@ -54,28 +54,29 @@ metricbeat.modules:
   enabled: true
 
 processors:
-  - add_cloud_metadata: ~
-
+  - add_cloud_metadata: ~ ' > $PWD/metricbeat.yml
+cat << EOF >> metricbeat.yml
 output.elasticsearch:
-  hosts: 'http://:elasticsearch:9200' ' > $PWD/metricbeat.yml
-
+  hosts: 'http://${localip}:9200'
+EOF
 
 ############
 # APM Server
 ############
 # https://raw.githubusercontent.com/elastic/apm-server/master/apm-server.docker.yml
-echo '
+cat << EOF > apm-server.yml
 ---
 apm-server:
   host: 0.0.0.0:8200
   ssl.enabled: false
 
 output.elasticsearch:
-  hosts: ["http://elasticsearch:9200"]
+  hosts: ["http://${localip}:9200"]
 
 
 monitoring:
-  enabled: true '  > apm-server.yml
+  enabled: true
+EOF
 
 #################
 # Route53 Section
@@ -187,6 +188,7 @@ services:
       context: .
       dockerfile: MetricBeatDockerfile
     image: metricbeat:metricbeat
+    network_mode: host
     container_name: metricbeat
     restart: unless-stopped
     depends_on: ['elasticsearch']
@@ -204,6 +206,7 @@ services:
      context: .
      dockerfile: APMServerDockerfile
     image: apm:apm
+    network_mode: host
     depends_on: ['elasticsearch']
     container_name: apm
     command: -e --strict.perms=false
