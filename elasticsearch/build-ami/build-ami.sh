@@ -45,20 +45,13 @@ df -hT
 lsblk -o name,mountpoint,label,size,uuid
 chmod 0777 /data/
 
-############
-# Enable TLS
-############
-curl -# -LO https://raw.githubusercontent.com/quickbooks2018/cloudflare-tls/main/ssl.sh
-chmod +x ssl.sh
-bash -uvx ssl.sh
-chmod 0777 -R ${HOME}/tls
-mv tls /tls
+
 
 #############
 # Docker pull
 ##############
 ELASTIC_IMAGE='docker.elastic.co/elasticsearch/elasticsearch'
-ELASTIC_VERSION='7.17.7'
+ELASTIC_VERSION='8.5.0'
 
 export ELASTIC_IMAGE
 export ELASTIC_VERSION
