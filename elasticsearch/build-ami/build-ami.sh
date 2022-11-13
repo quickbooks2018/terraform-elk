@@ -51,7 +51,7 @@ chmod 0777 /data/
 # Docker pull
 ##############
 ELASTIC_IMAGE='docker.elastic.co/elasticsearch/elasticsearch'
-ELASTIC_VERSION='8.5.0'
+ELASTIC_VERSION='7.17.7'
 
 export ELASTIC_IMAGE
 export ELASTIC_VERSION
@@ -59,5 +59,6 @@ export ELASTIC_VERSION
 
 docker pull ${ELASTIC_IMAGE}:${ELASTIC_VERSION}
 docker pull docker.elastic.co/beats/metricbeat:${ELASTIC_VERSION}
+docker pull docker.elastic.co/apm/apm-server:${ELASTIC_VERSION}
 
 # End
