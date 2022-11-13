@@ -5,6 +5,11 @@
 # https://www.elastic.co/guide/en/kibana/current/docker.html
 # https://www.elastic.co/guide/en/kibana/current/settings.html
 
+
+zonename='cloudgeeks.tk'
+localip=$(curl -fs http://169.254.169.254/latest/meta-data/local-ipv4)
+localip_host=$(echo "$((${-+"(${localip//./"+256*("}))))"}>>24&255))")
+
 ######################################
 # Docker & Docker Compose Installation
 ######################################
