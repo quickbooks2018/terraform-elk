@@ -59,12 +59,13 @@ processors:
   - add_cloud_metadata: ~
 
 output.elasticsearch:
-  hosts: 'http://${localip}:9200' 
+  hosts: 'http://${localip}:9200'
 EOF
 
 ############
 # APM Server
 ############
+KIBANA_URL='kiabana.cloudgeeks.tk'
 # https://raw.githubusercontent.com/elastic/apm-server/master/apm-server.docker.yml
 cat << EOF > apm-server.yml
 ---
@@ -75,9 +76,12 @@ apm-server:
 output.elasticsearch:
   hosts: ["http://${localip}:9200"]
 
+kibana:
+  enabled: true
+  host: ["http://${KIBANA_URL}:5601"]
 
 monitoring:
-  enabled: true 
+  enabled: true
 EOF
 #################
 # Route53 Section
