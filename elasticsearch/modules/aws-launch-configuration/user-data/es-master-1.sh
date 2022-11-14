@@ -154,7 +154,7 @@ services:
        options:
          awslogs-group: "elasticsearch"
          awslogs-region: "us-east-1"
-         awslogs-stream: ${CONTAINER_NAME}
+         awslogs-stream: ${ELASTIC_CONTAINER_NAME}
     container_name: ${ELASTIC_CONTAINER_NAME}
     hostname: ${HOST1}
     restart: unless-stopped
