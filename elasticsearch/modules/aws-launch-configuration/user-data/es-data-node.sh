@@ -128,9 +128,6 @@ services:
     container_name: ${CONTAINER_NAME}-${localip_host}
     hostname: ${CONTAINER_NAME}-${localip_host}
     restart: unless-stopped
-    ports:
-      - ${localip}:9200:9200
-      - ${localip}:9300:9300
     volumes:
       - /data:/usr/share/elasticsearch/data
 
